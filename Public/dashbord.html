@@ -1,0 +1,215 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<style>
+  body {
+    width: 100%;
+    background-image: url(../assets/orderhistory_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    margin-top: 30px;
+    width: 90%;
+    padding: 20px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    backdrop-filter: blur(20px);
+    max-width: 900px;
+  }
+  .text-adjust {
+    color: #70453b;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .header-adjust {
+    color: white;
+    background-color: #70453b;
+  }
+  .button-adjust {
+    background-color: #dcb392;
+    color: white;
+    border-radius: 20px;
+    margin-right: 10px;
+  }
+  .error-message {
+    color: red;
+    font-size: small;
+  }
+</style>
+<link rel="stylesheet" href="./css/home.css" />
+
+<body>
+  <div class="container" id="dashboard-body">
+    <div class="row">
+      <div id="order-processed">
+        <div
+          class="container-fluid"
+          style="
+            margin-top: 10px;
+            border-style: solid;
+            border-width: 3px;
+            border-color: aliceblue;
+            padding: 10px;
+          "
+        >
+          <div class="md-4">
+            <h2 class="header-adjust">Orders Processed</h2>
+            <table class="table">
+              <thead>
+                <tr class="table-warning">
+                  <th scope="col">ORDER_ID</th>
+                  <th scope="col">ITEM NAME</th>
+                  <th scope="col">DATATIME</th>
+                  <th scope="col">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="processed-table">
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Mark</td>
+                  <td>Otto</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div
+          class="container-fluid"
+          style="
+            margin-top: 30px;
+            border-style: solid;
+            border-width: 3px;
+            border-color: aliceblue;
+            padding: 10px;
+          "
+          id="order-in-processing"
+        >
+          <div class="md-4">
+            <h2 class="header-adjust">Orders In Processing</h2>
+            <table class="table">
+              <thead>
+                <tr class="table-warning">
+                  <th scope="col">ORDER_ID</th>
+                  <th scope="col">ITEM NAME</th>
+                  <th scope="col">DATATIME</th>
+                  <th scope="col">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="processing-table">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+    let tableProcessing = document.getElementById("processing-table");
+    let tableProcessed = document.getElementById("processed-table");
+
+    getProcessed();
+    getPending();
+
+    let processingDataCopy;
+    async function getPending(){
+        for(let i = 0;i<tableProcessing.rows.length;i++)
+        tableProcessed.deleteRow(i);
+        fetch("http://localhost:8080/branch/getPendingOrder/"+localStorage.getItem("emailValidated"),{
+            method : "POST"
+        }).then(resp => resp.json()).then(data => {
+            dataCopy = data;
+            // console.log(data);
+            for(let i=0;i<data.length;i++){
+                let row = tableProcessing.insertRow(-1);
+                row.insertCell(0).innerText = data[i].oid;
+                row.insertCell(1).innerText = data[i].item.fname;
+                row.insertCell(2).innerText = data[i].orderDate;
+                let done = document.createElement("button");
+                let text = document.createTextNode("Processed");
+                done.appendChild(text);
+                done.classList.add("btn");
+                done.classList.add("button-adjust");
+                done.onclick = function(){
+                    console.log("Clicked order id: ",data[i].oid);
+                    fetch("http://localhost:8080/branch/updateToProcessed/"+data[i].oid,{
+                        method : "POST"
+                    }).then(resp => resp.json()).then(data => {
+                        if(data){
+                            resetAll();
+                        }else{
+                            alert("Somthing went Wrong")
+                        }
+                    })
+                }
+                row.insertCell(3).appendChild(done);
+                
+            }
+        })
+    }
+    
+    async function resetAll(){
+        for(let i = 0;i<tableProcessed.rows.length;i++)
+            tableProcessed.deleteRow(i);
+        for(let i = 0;i<tableProcessing.rows.length;i++)
+            tableProcessing.deleteRow(i);
+        getPending();
+        getProcessed();
+    }
+    
+    let processedDataCopy;
+    async function getProcessed(){
+        for(let i = 0;i<tableProcessed.rows.length;i++)
+        tableProcessed.deleteRow(i);
+        fetch("http://localhost:8080/branch/getProcessedOrder/"+localStorage.getItem("emailValidated"),{
+            method : "POST"
+        }).then(resp => resp.json()).then(data => {
+            processedDataCopy = data;
+            console.log(data);
+            for(let i = 0;i<tableProcessed.rows.length;i++)
+                tableProcessed.deleteRow(i);
+            for(let i = 0;i<data.length;i++){
+                let row = tableProcessed.insertRow(-1);
+                row.insertCell(0).innerText = data[i].oid;
+                row.insertCell(1).innerText = data[i].item.fname;
+                row.insertCell(2).innerText = data[i].orderDate;
+                let done = document.createElement("button");
+                let text = document.createTextNode("Delivered");
+                done.appendChild(text);
+                done.classList.add("btn");
+                done.classList.add("button-adjust");
+                done.onclick = function(){
+                    console.log("Clicked order id: ",data[i].oid);
+                    fetch("http://localhost:8080/branch/updateToDelivered/"+data[i].oid,{
+                        method : "POST"
+                    }).then(resp => resp.json()).then(data => {
+                        if(data){
+                            resetAll();
+                        }else{
+                            alert("Somthing went Wrong")
+                        }
+                    })
+                }
+                row.insertCell(3).appendChild(done);
+            }
+
+        })
+    }
+</script>

@@ -1,0 +1,134 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<style>
+  body {
+    width: 100%;
+    background-image: url(../assets/orderhistory_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    margin-top: 30px;
+    width: 70%;
+    padding: 30px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    backdrop-filter: blur(20px);
+    max-width: 900px;
+  }
+  .text-adjust {
+    color: #70453b;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .header-adjust {
+    color: white;
+    background-color: #70453b;
+  }
+  .button-adjust {
+    background-color: #dcb392;
+    color: white;
+    border-radius: 20px;
+    margin-right: 10px;
+  }
+  .error-message {
+    color: red;
+    font-size: small;
+  }
+</style>
+<link rel="stylesheet" href="./css/home.css" />
+<body>
+  <div class="container" id="branchRequest">
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr class="header-adjust">
+            <th scope="col">ITEM ID</th>
+            <th scope="col">REQUESTED ITEAM NAME</th>
+            <th scope="col">REQUESTED ITEAM MRP</th>
+            <th scope="col" colspan="2">ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+  
+    </div>
+  </div>
+  <script>
+    
+    function rejectRequest(index){
+        console.log(copyOfData[index]);
+        fetch("http://localhost:8080/branch/cancelRequest/"+copyOfData[index].id,{
+          method: "POST"
+        }).then(resp => resp.json()).then(data => {
+          let table = document.getElementById("table-body");
+          for(let i = 0 ;i < table.rows.length;i++){
+              table.deleteRow(i);
+          }
+          if(data){
+            alert("You canceled the a new Item to be Listed.");
+          }else{
+            alert("Somthing went Wrong");
+          }
+          fetchAndSet();
+        })
+        
+    }
+    let copyOfData;
+    fetchAndSet();
+   async function fetchAndSet(){
+        fetch("http://localhost:8080/branch/getAllRequests/"+localStorage.getItem("emailValidated"),{
+            method : "POST"
+        }).then(resp => resp.json()).then(data => {
+          let table = document.getElementById("table-body");
+          for(let i = 0 ;i < table.rows.length;i++){
+              table.deleteRow(i);
+          }
+            if(data.length == 0)
+                alert("No Pending Request present");
+                copyOfData = data;
+                
+                if(data.length==0){
+                    for(let i = 0 ;i < table.rows.length;i++){
+                      table.deleteRow(i);
+                    }
+                }
+                for(let i = 0 ;i < table.rows.length;i++){
+                    table.deleteRow(i);
+                }
+                for(let i=0;i<data.length;i++){
+                    let row = table.insertRow(-1);
+                    row.insertCell(0).innerText = data[i].foodItem.fid;
+                    row.insertCell(1).innerText = data[i].foodItem.fname;
+                    row.insertCell(2).innerText = data[i].foodItem.fmrp;
+                    
+                    let reject = document.createElement("button");
+                    let textReject = document.createTextNode("CANCEL");
+                    reject.appendChild(textReject);
+                    reject.classList.add("btn");
+                    reject.classList.add("button-adjust");
+                    reject.onclick = function(){
+                        rejectRequest(i);
+                    }
+                    row.insertCell(3).appendChild(reject);
+            }
+        });
+    }
+  </script>
+</body>

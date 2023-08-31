@@ -1,0 +1,30 @@
+body {
+  height: 100vh;
+  background-image: url(../../assets/index_bg2.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  padding-top: 10%;
+}
+
+.container {
+  width: 80%;
+  padding: 30px;
+  max-width: 900px;
+  border-style: solid;
+  border-color: white;
+  background-color: white;
+  background: rgb(255, 255, 255, 0.2);
+}
+
+.text-bg {
+  color: black;
+  font-weight: bold;
+}
+
+.heading-color {
+  color: white;
+}
+.field-lable-color {
+  color: #c0c0c0;
+}

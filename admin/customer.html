@@ -1,0 +1,303 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<style>
+  body {
+    width: 100%;
+    background-image: url(../assets/orderhistory_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    margin-top: 30px;
+    width: 70%;
+    padding: 30px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    backdrop-filter: blur(20px);
+    max-width: 900px;
+  }
+  .text-adjust {
+    color: #70453b;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .header-adjust {
+    color: white;
+    background-color: #70453b;
+  }
+  .button-adjust {
+    background-color: #dcb392;
+    color: white;
+  }
+  .error-message {
+    color: red;
+    font-size: small;
+  }
+</style>
+<link rel="stylesheet" href="./css/home.css" />
+<body>
+  <div class="container" id="search-form">
+    <div class="row">
+      <form>
+        <h2 class="mb-3-sm text-adjust">Search Customer</h2>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label field-lable-color"
+            >Search By</label
+          >
+          <select name="searchType" id="searchType" class="form-control">
+            <option value="--Select Search Type--">
+              --Select Search Type--
+            </option>
+            <option value="CONTACT NUMBER">CONTACT NUMBER</option>
+            <option value="EMAIL">EMAIL</option>
+            <option value="NAME">NAME</option>
+          </select>
+        </div>
+        <div class="mb-3 visibility" id="contact">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Enter Contact Number</label
+          >
+          <input type="number" class="form-control" name="inputdata" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <div class="mb-3 visibility" id="email">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Enter Email ID</label
+          >
+          <input type="email" class="form-control" name="inputdata" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <div class="mb-3 visibility" id="name">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Enter Name</label
+          >
+          <input type="text" class="form-control" name="inputdata" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <button
+          type="button"
+          onclick="custmsearchvalidation()"
+          class="btn button-adjust visibility"
+          id="customer_search"
+        >
+          Get Details
+        </button>
+      </form>
+    </div>
+  </div>
+  <!-- display output -->
+  <div class="container visibility" id="search-result">
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr class="table-warning">
+            <th scope="col">CNAME</th>
+            <th scope="col">CGENDER</th>
+            <th scope="col">CEMAIL</th>
+            <th scope="col">CPHONE</th>
+            <th scope="col">ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="customer-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- display output -->
+  <div class="container visibility" id="order-history">
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr class="table-warning">
+            <th scope="col">CNAME</th>
+            <th scope="col">CEMAIL</th>
+            <th scope="col">CPHONE</th>
+            <th scope="col">BNAME</th>
+            <th scope="col">LOCATION</th>
+            <th scope="col">ITEM</th>
+            <th scope="col">QUANTITY</th>
+            <th scope="col">TOTAL AMOUNT</th>
+          </tr>
+        </thead>
+        <tbody id="order-table"></tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    let searchType = document.getElementById("searchType");
+    let customerSearchButton = document.getElementById("customer_search");
+    let selectedType;
+
+    let searchForm = document.getElementById("search-form");
+    let searchResult = document.getElementById("search-result");
+    let orderHistory = document.getElementById("order-history");
+
+    function displayContaint(selectedElement) {
+      document.getElementById(selectedElement).classList.remove("visibility");
+      if (selectedType == null) {
+        selectedType = document.getElementById(selectedElement);
+        customerSearchButton.classList.remove("visibility");
+      } else {
+        selectedType.classList.add("visibility");
+        selectedType = document.getElementById(selectedElement);
+        customerSearchButton.classList.remove("visibility");
+      }
+    }
+
+    searchType.addEventListener("change", function () {
+      let element = searchType.value;
+      if (element == "CONTACT NUMBER") {
+        displayContaint("contact");
+      } else if (element == "EMAIL") {
+        displayContaint("email");
+      } else if (element == "NAME") {
+        displayContaint("name");
+      } else if (element == "--Select Search Type--") {
+        if (selectedType == null);
+        else {
+          selectedType.classList.add("visibility");
+          selectedType = null;
+          customerSearchButton.classList.add("visibility");
+        }
+      }
+    });
+    let url = "http://localhost:8080/admin/";
+    function generateURL(subpath) {
+      url = url + subpath;
+    }
+
+    function custmsearchvalidation() {
+      let flag = true;
+      let searchData = selectedType.getElementsByTagName("input").item(0).value;
+      if (searchType.value == "EMAIL") {
+        let validEmailWithRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (searchData.length == 0) {
+          selectedType.getElementsByTagName("p").item(0).innerText =
+            "Enter a email";
+          flag = false;
+        } else if (!searchData.match(validEmailWithRegex)) {
+          selectedType.getElementsByTagName("p").item(0).innerText =
+            "Enter a valid email";
+          flag = false;
+        } else {
+          selectedType.getElementsByTagName("p").item(0).innerText = "";
+        }
+      } else if (searchType.value == "CONTACT NUMBER") {
+        if (searchData.length != 10) {
+          selectedType.getElementsByTagName("p").item(0).innerText =
+            "Number must be of 10 digits";
+          flag = false;
+        } else if (
+          !(
+            searchData.charAt(0) == "9" ||
+            searchData.charAt(0) == "8" ||
+            searchData.charAt(0) == "7" ||
+            searchData.charAt(0) == "6"
+          )
+        ) {
+          selectedType.getElementsByTagName("p").item(0).innerText =
+            "Enter a valid number";
+          flag = false;
+        } else {
+          selectedType.getElementsByTagName("p").item(0).innerText = "";
+        }
+      } else if (searchData == "" || searchData.trim().length == 0) {
+        selectedType.getElementsByTagName("p").item(0).innerText = "Enter Name";
+        flag = false;
+      } else {
+        selectedType.getElementsByTagName("p").item(0).innerText = "";
+      }
+
+      if (flag) {
+        if (searchType.value == "CONTACT NUMBER") {
+          generateURL("findByMobile/" + searchData);
+        } else if (searchType.value == "EMAIL") {
+          generateURL("findByEmail/" + searchData);
+        } else if (searchType.value == "NAME") {
+          generateURL("findByName/" + searchData);
+        }
+        displayResult();
+      }
+    }
+
+    async function displayResult() {
+      let table = document.getElementById("customer-table");
+      for (let i = 0; table.rows.length; i++) {
+        table.deleteRow(i);
+      }
+      fetch(url, {
+        method: "POST",
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          console.log(data);
+          if (data.length == 0) alert("No record found");
+          for (let i = 0; i < data.length; i++) {
+            let row = table.insertRow(-1);
+            row.insertCell(0).innerText = data[i].cname;
+            row.insertCell(1).innerText = data[i].cgender;
+            row.insertCell(2).innerText = data[i].cemail;
+            row.insertCell(3).innerText = data[i].cphone;
+            let done = document.createElement("button");
+            let text = document.createTextNode("Order History");
+            done.appendChild(text);
+            done.classList.add("btn");
+            done.classList.add("button-adjust");
+            done.onclick = function () {
+              getOrderDetails(data[i].cid);
+            };
+            row.insertCell(4).appendChild(done);
+          }
+        });
+      searchForm.classList.add("visibility");
+      searchResult.classList.remove("visibility");
+    }
+    async function getOrderDetails(cid) {
+      let table = document.getElementById("order-table");
+      for (let i = 0; table.rows.length; i++) {
+        table.deleteRow(i);
+      }
+      fetch("http://localhost:8080/admin/getOrderDetails/" + cid, {
+        method: "POST",
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          console.log(data);
+          if (data.length == 0) alert("No record found");
+          for (let i = 0; i < data.length; i++) {
+            let row = table.insertRow(-1);
+            row.insertCell(0).innerText = data[i].customer.cname;
+            row.insertCell(1).innerText = data[i].customer.cemail;
+            row.insertCell(2).innerText = data[i].customer.cphone;
+            row.insertCell(3).innerText = data[i].branch.bname;
+            row.insertCell(4).innerText = data[i].branch.blocation;
+            row.insertCell(5).innerText = data[i].item.fname;
+            row.insertCell(6).innerText = data[i].quantity;
+            row.insertCell(7).innerText = data[i].quantity * data[i].item.fmrp;
+          }
+        });
+      searchResult.classList.add("visibility");
+      orderHistory.classList.remove("visibility");
+    }
+  </script>
+</body>

@@ -1,0 +1,428 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<style>
+  body {
+    width: 100%;
+    background-image: url(../assets/orderhistory_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    margin-top: 30px;
+    width: 70%;
+    padding: 30px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    backdrop-filter: blur(20px);
+    max-width: 900px;
+  }
+  .text-adjust {
+    color: #70453b;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .header-adjust {
+    color: white;
+    background-color: #70453b;
+  }
+  .button-adjust {
+    background-color: #dcb392;
+    color: white;
+    border-radius: 20px;
+    margin-right: 10px;
+  }
+  .error-message {
+    color: red;
+    font-size: small;
+  }
+</style>
+<link rel="stylesheet" href="./css/home.css" />
+<body>
+  <div class="container" id="allbranches">
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr class="header-adjust">
+            <th scope="col">NAME</th>
+            <th scope="col">STATE</th>
+            <th scope="col">DISTRICT</th>
+            <th scope="col">LOCATION</th>
+            <th scope="col">ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="container visibility" id="alldetails">
+    <div class="row">
+      <div class="card">
+        <div class="card-header header-adjust" id="email">null</div>
+        <div class="card-body">
+          <label style="font-weight: bold">Branch Name: </label>
+          <h5 class="card-title" id="name">null</h5>
+          <p class="card-text"></p>
+          <label style="font-weight: bold">LOCATION: </label>
+          <p class="card-text" id="location">null</p>
+          <label style="font-weight: bold">STATE: </label>
+          <p class="card-text" id="state">null</p>
+          <label style="font-weight: bold">DISTRICT: </label>
+          <p class="card-text" id="district">null</p>
+          <label style="font-weight: bold">PIN: </label>
+          <p class="card-text" id="pin">null</p>
+          <div class="d-flex float-end">
+            <button
+              class="btn button-adjust"
+              style="margin-right: 10px; border-radius: 20px"
+              id="back"
+            >
+              Back
+            </button>
+            <button
+              class="btn button-adjust visibility"
+              style="margin-right: 10px; border-radius: 20px"
+              id="delete"
+            >
+              Delete
+            </button>
+            <button
+              class="btn button-adjust visibility"
+              style="margin-right: 10px; border-radius: 20px"
+              id="update-menu"
+            >
+              Update Menu
+            </button>
+            <button
+              class="btn button-adjust"
+              style="margin-right: 10px; border-radius: 20px"
+              id="update"
+            >
+              Update Branch Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container visibility" id="update-branch">
+    <div class="row">
+      <form id="branch-form" method="POST">
+        <div class="mb-3">
+          <label
+            for="exampleInputEmail1"
+            class="form-label text-bg field-lable-color"
+            >Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            aria-describedby="emailHelp"
+            name="bname"
+          />
+          <div id="error-name" class="form-text" style="color: red"></div>
+        </div>
+        <div class="mb-3">
+          <label
+            for="exampleInputPassword1"
+            class="form-label text-bg field-lable-color"
+            >Address</label
+          >
+          <input type="text" class="form-control" name="baddress" />
+          <div id="error-address" class="form-text" style="color: red"></div>
+        </div>
+        <div class="mb-3">
+          <label
+            for="exampleInputPassword1"
+            class="form-label text-bg field-lable-color"
+            >District</label
+          >
+          <input type="text" class="form-control" name="bdistrict" />
+          <div id="error-district" class="form-text" style="color: red"></div>
+        </div>
+        <div class="mb-3">
+          <input
+            type="email"
+            class="form-control"
+            name="bemail"
+            readonly
+            hidden
+          />
+        </div>
+        <div class="mb-3">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Select State</label
+          >
+          <select name="bstate" class="form-control">
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Chhattisgarh">Chhattisgarh</option>
+            <option value="Goa">Goa</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Himachal">Himachal Pradesh</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Manipur">Manipur</option>
+            <option value="Meghalaya">Meghalaya</option>
+            <option value="Mizoram">Mizoram</option>
+            <option value="Nagaland">Nagaland</option>
+            <option value="Odisha">Odisha</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Sikkim">Sikkim</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Tripura">Tripura</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Uttarakhand">Uttarakhand</option>
+            <option value="West Bengal">West Bengal</option>
+          </select>
+          <div id="error-state" class="form-text" style="color: red"></div>
+        </div>
+
+        <div class="mb-3">
+          <label
+            for="exampleInputPassword1"
+            class="form-label text-bg field-lable-color"
+            >Pin</label
+          >
+          <input type="number" class="form-control" name="bpin" />
+          <div id="error-pin" class="form-text" style="color: red"></div>
+        </div>
+        <button
+          type="button"
+          class="btn button-adjust d-flex float-end"
+          onclick="backToBranchesFromUpdateBranch()"
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          class="btn button-adjust d-flex float-end"
+          onclick="updateBranch()"
+        >
+          Update
+        </button>
+      </form>
+    </div>
+  </div>
+  <script>
+    let allBranchesBody = document.getElementById("allbranches");
+    let branchDetailsBody = document.getElementById("alldetails");
+    let updateBranchBody = document.getElementById("update-branch");
+
+    let allbrachDataCopy;
+    let branchDataCopy;
+    let selectedIndex;
+
+    function backToBranchesFromUpdateBranch() {
+      displayAllDetails(selectedIndex);
+      updateBranchBody.classList.add("visibility");
+      branchDetailsBody.classList.remove("visibility");
+    }
+    function displayAllDetails(index) {
+      selectedIndex = index;
+      fetch(
+        "http://localhost:8080/branch/getBranchDetails/" +
+          allbrachDataCopy[index].bemail,
+        {
+          method: "POST",
+        }
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+          branchDataCopy = data;
+          document.getElementById("email").innerHTML = data.bemail;
+          document.getElementById("name").innerHTML = data.bname;
+          document.getElementById("location").innerHTML = data.blocation;
+          document.getElementById("state").innerHTML = data.bstate;
+          document.getElementById("district").innerHTML = data.bdistrict;
+          document.getElementById("pin").innerHTML = data.bpin;
+          document.getElementById("back").onclick = function () {
+            resetTable();
+            fetchAllDetails();
+            allBranchesBody.classList.remove("visibility");
+            branchDetailsBody.classList.add("visibility");
+          };
+        });
+
+      document.getElementById("update").onclick = function () {
+        let name = document.getElementById("branch-form").bname;
+        let address = document.getElementById("branch-form").baddress;
+        let district = document.getElementById("branch-form").bdistrict;
+        let email = document.getElementById("branch-form").bemail;
+        let state = document.getElementById("branch-form").bstate;
+        let pin = document.getElementById("branch-form").bpin;
+
+        name.value = branchDataCopy.bname;
+        address.value = branchDataCopy.blocation;
+        district.value = branchDataCopy.bdistrict;
+        email.value = branchDataCopy.bemail;
+        state.value = branchDataCopy.bstate;
+        pin.value = branchDataCopy.bpin;
+        branchDetailsBody.classList.add("visibility");
+        updateBranchBody.classList.remove("visibility");
+      };
+    }
+    const isAlphabatesonly = (str) => /^[A-Z a-z]+$/i.test(str);
+    function updateBranch() {
+      let flag = true;
+      // --- element selection---
+      let name = document.getElementById("branch-form").bname;
+      let address = document.getElementById("branch-form").baddress;
+      let district = document.getElementById("branch-form").bdistrict;
+      let email = document.getElementById("branch-form").bemail;
+      let state = document.getElementById("branch-form").bstate;
+      let pin = document.getElementById("branch-form").bpin;
+
+      // --- error message element selection---
+      let nameError = document.getElementById("error-name");
+      let addressError = document.getElementById("error-address");
+      let districtError = document.getElementById("error-district");
+      let stateError = document.getElementById("error-state");
+      let pinError = document.getElementById("error-pin");
+
+      // ---name validation---
+      if (name.value == "") {
+        nameError.innerHTML = "Please provide name";
+        flag = false;
+      } else if (!isAlphabatesonly(name.value)) {
+        nameError.innerHTML = "Spacial charecters are not allowed";
+        flag = false;
+      } else if (name.value.trim().length == 0) {
+        nameError.innerHTML = "Name can't be empty";
+        flag = false;
+      } else {
+        nameError.innerHTML = "";
+      }
+
+      // ---address validation---
+      if (address.value == "") {
+        addressError.innerHTML = "Please provide address";
+        flag = false;
+      } else if (address.value.trim().length == 0) {
+        addressError.innerHTML = "address can't be empty";
+        flag = false;
+      } else {
+        addressError.innerHTML = "";
+      }
+
+      // ---district validation---
+      if (district.value == "") {
+        districtError.innerHTML = "Please provide the full name";
+        flag = false;
+      } else if (!isAlphabatesonly(district.value)) {
+        districtError.innerHTML = "Spacial charecters are not allowed";
+        flag = false;
+      } else if (district.value.trim().length == 0) {
+        districtError.innerHTML = "Name can't be empty";
+        flag = false;
+      } else {
+        districtError.innerHTML = "";
+      }
+
+      // ---pin validation---
+      if (pin.value.length == 0) {
+        pinError.innerHTML = "Enter the PIN code";
+        flag = false;
+      } else if (pin.value.length != 6) {
+        pinError.innerHTML = "Enter a valid PIN code";
+        flag = false;
+      } else {
+        pinError.innerHTML = "";
+      }
+
+      if (flag) {
+        const updatedDetails = {
+          bemail: email.value,
+          bname: name.value,
+          blocation: address.value,
+          bdistrict: district.value,
+          bstate: state.value,
+          bpin: pin.value,
+        };
+
+        fetch("http://localhost:8080/admin/updateBranch", {
+          method: "POST",
+          body: JSON.stringify(updatedDetails),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data) alert("Details Updated");
+            else alert("Somthing went wrong! Update may not be recorded.");
+          });
+      }
+    }
+
+    fetchAllDetails();
+
+    if (localStorage.getItem("selectedBranch") != null) {
+      localStorage.removeItem("selectedBranch");
+    }
+
+    function resetTable() {
+      let table = document.getElementById("table-body");
+      for (let i = 0; i < table.rows.length; i++) {
+        table.deleteRow(i);
+      }
+    }
+
+    function fetchAllDetails() {
+      fetch("http://localhost:8080/admin/branchList", {
+        method: "POST",
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          resetTable();
+          if (data.length == 0) alert("No Branches Present");
+          else {
+            let table = document.getElementById("table-body");
+            allbrachDataCopy = data;
+
+            for (let i = 0; i < data.length; i++) {
+              let row = table.insertRow(-1);
+              row.insertCell(0).innerText = data[i].bname;
+              row.insertCell(1).innerText = data[i].bstate;
+              row.insertCell(2).innerText = data[i].bdistrict;
+              row.insertCell(3).innerText = data[i].blocation;
+              let button = document.createElement("Button");
+              let text = document.createTextNode("Details");
+              button.appendChild(text);
+              button.onclick = function () {
+                allBranchesBody.classList.add("visibility");
+                branchDetailsBody.classList.remove("visibility");
+                displayAllDetails(i);
+              };
+              button.classList.add("btn");
+              button.classList.add("button-adjust");
+              row.insertCell(4).appendChild(button);
+            }
+          }
+        });
+    }
+  </script>
+</body>

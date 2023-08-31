@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="./css/home.css" />
+  </head>
+  <body class="visibility" id="mainBody">
+    <div class="sticky">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand">KFC</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" id="dashboard" aria-current="page"
+                  >DASHBOARD</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="takeorder">TAKE ORDER</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  id="fooditem"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  FOOD
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="fooditem">
+                  <li>
+                    <a class="dropdown-item" id="addfood">ADD NEW ITEM</a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" id="pending-request"
+                      >PENDING REQUESTES</a
+                    >
+                  </li>
+
+                  <li><hr class="dropdown-divider" /></li>
+                  <li>
+                    <a class="dropdown-item" id="viewfoods">VIEW FOOD MENU</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+            <li class="nav-item d-flex float-end">
+              <a
+                class="nav-link"
+                id="branch-email-display"
+                style="text-decoration: none; color: gray"
+                >null</a
+              >
+              <a class="btn btn-secondary d-flex float-end" onclick="logout()"
+                >LOGOUT</a
+              >
+            </li>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <embed
+      class="body-containt-size-correction"
+      src="./dashbord.html"
+      type="text/html"
+      id="dashboard-body"
+      style="overflow-y: scroll"
+    />
+
+    <embed
+      class="visibility body-containt-size-correction"
+      src="./customer.html"
+      type="text/html"
+      id="customer-body"
+      style="overflow-y: scroll"
+    />
+
+    <embed
+      class="body-containt-size-correction visibility"
+      src="./addmenu.html"
+      type="text/html"
+      id="addfood_body"
+      style="overflow-y: scroll"
+    />
+
+    <embed
+      class="body-containt-size-correction visibility"
+      src="./pendingrequest.html"
+      type="text/html"
+      id="prendingRequest-body"
+      style="overflow-y: scroll"
+    />
+
+    <embed
+      class="body-containt-size-correction visibility"
+      src="./availableIteams.html"
+      type="text/html"
+      id="availablefood-body"
+      style="overflow-y: scroll"
+    />
+
+    <embed
+      class="body-containt-size-correction visibility"
+      src="./takeoder.html"
+      type="text/html"
+      id="takeorder-body"
+      style="overflow-y: scroll"
+    />
+  </body>
+  <script src="./js/navbar.js"></script>
+</html>

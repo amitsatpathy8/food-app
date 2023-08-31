@@ -1,0 +1,539 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<style>
+  body {
+    width: 100%;
+    background-image: url(../assets/orderhistory_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    margin-top: 30px;
+    width: 70%;
+    padding: 30px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    backdrop-filter: blur(20px);
+    max-width: 900px;
+  }
+  .text-adjust {
+    color: #70453b;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .header-adjust {
+    color: white;
+    background-color: #70453b;
+  }
+  .button-adjust {
+    background-color: #dcb392;
+    color: white;
+    border-radius: 20px;
+    margin-right: 10px;
+  }
+  .error-message {
+    color: red;
+    font-size: small;
+  }
+</style>
+<link rel="stylesheet" href="./css/home.css" />
+<body>
+  <div class="container" id="findCustomerDetails">
+    <div class="row">
+      <h2 class="form-label text-adjust">TAKE ORDER</h2>
+      <form id="find-form">
+        <div class="mb-3">
+          <div id="error-contact" class="form-text" style="color: red"></div>
+          <label class="form-label text-bg field-lable-color"
+            >Enter Customer Contact Number</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            aria-describedby="emailHelp"
+            name="contact"
+          />
+        </div>
+        <button
+          type="button"
+          class="btn button-adjust"
+          onclick="findCustomer()"
+        >
+          Find
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="container visibility" id="customer-signup-body">
+    <div class="row">
+      <h2 class="display-6">SignUp to Enjoy All the Benifites</h2>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form action="" id="form">
+          <div class="mb-3">
+            <div class="error-message" id="error-name"></div>
+            <label for="exampleInputEmail1" class="form-label">Full Name</label>
+            <input
+              type="text"
+              class="form-control"
+              aria-describedby="emailHelp"
+              name="name"
+            />
+          </div>
+          <div class="mb-3">
+            <div class="error-message" id="error-gender"></div>
+            <label for="exampleInputEmail1" class="form-label">Gender</label>
+            <select
+              class="form-control"
+              aria-describedby="emailHelp"
+              name="gender"
+            >
+              <option selected>--select--</option>
+              <option>MALE</option>
+              <option>FEMALE</option>
+              <option>OTHER</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <div class="error-message" id="error-mob"></div>
+            <label for="exampleInputEmail1" class="form-label"
+              >Contact Number</label
+            >
+            <input
+              type="number"
+              class="form-control"
+              aria-describedby="emailHelp"
+              name="mob"
+            />
+            <div id="emailHelp" class="form-text">
+              We'll never share your contact information with anyone else.
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="error-message" id="error-email"></div>
+            <label for="exampleInputEmail1" class="form-label"
+              >Email address</label
+            >
+            <input
+              type="email"
+              class="form-control"
+              aria-describedby="emailHelp"
+              name="email"
+            />
+            <div id="emailHelp" class="form-text">
+              We'll never share your email with anyone else.
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="btn"
+            style="background-color: #6c9cbf; color: white"
+            onclick="validate()"
+          >
+            SignUp
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="container visibility" id="order-body">
+    <div class="row">
+      <h2 class="display-6">Take Order</h2>
+      <div class="error-message" id="order-not-placed-error"></div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form action="" id="order-form">
+          <div class="mb-3">
+            <div class="error-message" id="error-order-selected"></div>
+            <label for="exampleInputEmail1" class="form-label"
+              >SELECT A FOOD ITEM</label
+            >
+            <select
+              class="form-control"
+              aria-describedby="emailHelp"
+              name="ordered_item"
+            >
+              <option value="none" selected>--select--</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <div class="error-message" id="error-quantity-selected"></div>
+            <label for="exampleInputEmail1" class="form-label"
+              >ENTER QUANTITY</label
+            >
+            <input type="number" class="form-control" name="quantity" />
+          </div>
+          <button
+            type="button"
+            class="btn button-adjust d-flex float-end"
+            style="background-color: #6c9cbf; color: white"
+            onclick="addToCart()"
+          >
+            ADD TO CART
+          </button>
+          <button
+            type="button"
+            class="btn button-adjust d-flex float-end"
+            style="background-color: #6c9cbf; color: white"
+            onclick="placeOrder()"
+          >
+            PLACE ORDER
+          </button>
+          <div class="mb-3">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">NAME</th>
+                  <th scope="col">QUANTITY</th>
+                  <th scope="col">1 X Price</th>
+                  <th scope="col">Total Cost</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody id="cart-view"></tbody>
+            </table>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let customerContact = document.getElementById("find-form").contact;
+    let contactError = document.getElementById("error-contact");
+
+    let customerFindBody = document.getElementById("findCustomerDetails");
+    let coustomerSignUpBody = document.getElementById("customer-signup-body");
+    let orderBody = document.getElementById("order-body");
+
+    let data;
+    let cIsPresent;
+    let copyCustomerPhone;
+    let copyOfMenuIteams;
+    const orderList = [];
+
+    function placeOrder() {
+      if (orderList.length == 0) {
+        document.getElementById("order-not-placed-error").innerText =
+          "Please add somthing to cart :(";
+      } else {
+        document.getElementById("order-not-placed-error").innerText = "";
+        const finalOrderList = [];
+        for (let i = 0; i < orderList.length; i++) {
+          let temp = {
+            fid: orderList[i].fid,
+            quantity: orderList[i].quantity,
+          };
+          finalOrderList.push(temp);
+        }
+        fetch(
+          "http://localhost:8080/customer/placeOrder/" +
+            localStorage.getItem("emailValidated") +
+            "/" +
+            copyCustomerPhone,
+          {
+            method: "POST",
+            body: JSON.stringify(finalOrderList),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((resp) => resp.json())
+          .then((data) => console.log(data));
+      }
+    }
+
+    function addToCart() {
+      let itemSelected = document.getElementById("order-form").ordered_item;
+      let quantitySelected = document.getElementById("order-form").quantity;
+
+      let itemError = document.getElementById("error-order-selected");
+      let quantityError = document.getElementById("error-quantity-selected");
+
+      let flag = true;
+      if (itemSelected.value == "none") {
+        itemError.innerText = "Please select a valid item";
+        flag = false;
+      } else {
+        itemError.innerText = "";
+      }
+
+      if (quantitySelected.value <= 0) {
+        quantityError.innerText = "Please select a valid quantity";
+        flag = false;
+      } else if (
+        copyOfMenuIteams[itemSelected.value].quantity < quantitySelected.value
+      ) {
+        quantityError.innerHTML = "Out of Stock Error";
+        flag = false;
+      } else {
+        quantityError.innerHTML = "";
+      }
+
+      if (flag) {
+        let alreadyHave = false;
+        for (let i = 0; i < orderList.length; i++) {
+          if (orderList[i].index == itemSelected.value) {
+            if (
+              copyOfMenuIteams[itemSelected.value].quantity >=
+              orderList[i].quantity + quantitySelected.value
+            ) {
+              orderList[i].quantity =
+                orderList[i].quantity + quantitySelected.value;
+            } else {
+              orderList[i].quantity =
+                copyOfMenuIteams[itemSelected.value].quantity;
+            }
+            alreadyHave = true;
+          }
+        }
+        if (!alreadyHave) {
+          const itemDetails = {
+            index: itemSelected.value,
+            fid: copyOfMenuIteams[itemSelected.value].foodItem.fid,
+            quantity: quantitySelected.value,
+          };
+          orderList.push(itemDetails);
+        }
+
+        let table = document.getElementById("cart-view");
+        for (let i = 0; i < table.rows.length; i++) {
+          table.deleteRow(i);
+        }
+        displayCart();
+      }
+    }
+
+    function displayCart() {
+      let table = document.getElementById("cart-view");
+      for (let i = 0; i < table.rows.length; i++) {
+        table.deleteRow(i);
+      }
+
+      for (let i = 0; i < orderList.length; i++) {
+        let row = table.insertRow(-1);
+        row.insertCell(0).innerText =
+          copyOfMenuIteams[orderList[i].index].foodItem.fname;
+        row.insertCell(1).innerText = orderList[i].quantity;
+        row.insertCell(2).innerText =
+          copyOfMenuIteams[orderList[i].index].foodItem.fmrp;
+        row.insertCell(3).innerText =
+          copyOfMenuIteams[orderList[i].index].foodItem.fmrp *
+          orderList[i].quantity;
+        let reject = document.createElement("button");
+        let textReject = document.createTextNode("DELETE");
+        reject.appendChild(textReject);
+        reject.classList.add("btn");
+        reject.classList.add("button-adjust");
+        reject.onclick = function () {
+          orderList.pop(i);
+          displayCart();
+        };
+        row.insertCell(4).appendChild(reject);
+      }
+      let total = 0;
+      for (let i = 0; i < table.rows.length; i++) {
+        total =
+          total +
+          Number(
+            table.getElementsByTagName("tr")[i].getElementsByTagName("td")[3]
+              .innerText
+          );
+      }
+      let row = table.insertRow(-1);
+      row.insertCell(0).innerHTML = "TOTAL";
+      row.insertCell(1);
+      row.insertCell(2);
+      row.insertCell(3).innerText = total.toFixed(2);
+    }
+
+    function takeOrder() {
+      fetch(
+        "http://localhost:8080/branch/getAllMenu/" +
+          localStorage.getItem("emailValidated"),
+        {
+          method: "POST",
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          copyOfMenuIteams = data;
+          for (let i = 0; i < data.length; i++) {
+            let foodIteams = document.getElementById("order-form").ordered_item;
+            let option = document.createElement("option");
+            option.value = i;
+            let text = document.createTextNode(
+              String(data[i].foodItem.fname) +
+                "----------" +
+                String(data[i].foodItem.fmrp) +
+                " (" +
+                String(data[i].quantity) +
+                ")"
+            );
+            option.appendChild(text);
+            foodIteams.appendChild(option);
+          }
+        });
+      customerFindBody.classList.add("visibility");
+      orderBody.classList.remove("visibility");
+    }
+
+    function findCustomer() {
+      let flag = true;
+
+      // ---Contact validation---
+      if (customerContact.value.length != 10) {
+        contactError.innerHTML = "Number must be of 10 digits";
+        flag = false;
+      } else if (
+        !(
+          customerContact.value.charAt(0) == "9" ||
+          customerContact.value.charAt(0) == "8" ||
+          customerContact.value.charAt(0) == "7" ||
+          customerContact.value.charAt(0) == "6"
+        )
+      ) {
+        contactError.innerHTML = "Enter a valid number";
+        flag = false;
+      } else {
+        contactError.innerHTML = "";
+      }
+
+      if (flag) {
+        fetch(
+          "http://localhost:8080/customer/findCustomer/" +
+            customerContact.value,
+          {
+            method: "POST",
+          }
+        )
+          .then((resp) => resp.json())
+          .then((data) => {
+            cIsPresent = data;
+            if (!cIsPresent) {
+              customerFindBody.classList.add("visibility");
+              coustomerSignUpBody.classList.remove("visibility");
+              let contact = document.getElementById("form").mob;
+              contact.value = customerContact.value;
+            } else {
+              copyCustomerPhone = customerContact.value;
+              takeOrder();
+            }
+          });
+      }
+    }
+
+    const isAlphabatesonly = (str) => /^[A-Z a-z]+$/i.test(str);
+
+    function validate() {
+      let flag = true;
+      // ---error element selection---
+      let nameError = document.getElementById("error-name");
+      let genderError = document.getElementById("error-gender");
+      let contactError = document.getElementById("error-mob");
+      let emailError = document.getElementById("error-email");
+      // ----form element selection---
+      let name = document.getElementById("form").name;
+      let gender = document.getElementById("form").gender;
+      let contact = document.getElementById("form").mob;
+      let email = document.getElementById("form").email;
+
+      // ---name validation---
+      if (name.value == "") {
+        nameError.innerHTML = "Please provide the full name";
+        flag = false;
+      } else if (!isAlphabatesonly(name.value)) {
+        nameError.innerHTML = "Spacial charecters are not allowed";
+        flag = false;
+      } else if (name.value.trim().length == 0) {
+        nameError.innerHTML = "Name can't be empty";
+        flag = false;
+      } else {
+        nameError.innerHTML = "";
+      }
+
+      // ---gender validation---
+      if (gender.value == "--select--") {
+        genderError.innerHTML = "Please select the gender";
+        flag = false;
+      } else {
+        genderError.innerHTML = "";
+      }
+
+      // ---Contact validation---
+      if (contact.value.length != 10) {
+        contactError.innerHTML = "Number must be of 10 digits";
+        flag = false;
+      } else if (
+        !(
+          contact.value.charAt(0) == "9" ||
+          contact.value.charAt(0) == "8" ||
+          contact.value.charAt(0) == "7" ||
+          contact.value.charAt(0) == "6"
+        )
+      ) {
+        contactError.innerHTML = "Enter a valid number";
+        flag = false;
+      } else {
+        contactError.innerHTML = "";
+      }
+
+      // ---email validation---
+      let validEmailWithRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (email.value.length == 0) {
+        emailError.innerHTML = "Enter a email";
+        flag = false;
+      } else if (!email.value.match(validEmailWithRegex)) {
+        emailError.innerHTML = "Enter a valid email";
+        flag = false;
+      } else {
+        emailError.innerHTML = "";
+      }
+
+      if (flag) {
+        const customerDetailes = {
+          cname: name.value,
+          cgender: gender.value,
+          cemail: email.value,
+          cphone: contact.value,
+        };
+        copyCustomerPhone = contact.value;
+        fetch("http://localhost:8080/customer/saveCustomer", {
+          method: "POST",
+          body: JSON.stringify(customerDetailes),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((resp) => resp.json())
+          .then((data) => {
+            console.log(data);
+            if (data) {
+              coustomerSignUpBody.classList.add("visibility");
+              takeOrder();
+              orderBody.classList.remove("visibility");
+            }
+          });
+      }
+    }
+  </script>
+</body>

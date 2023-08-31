@@ -1,0 +1,193 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<style>
+  body {
+    width: 100%;
+    background-image: url(../assets/orderhistory_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    margin-top: 30px;
+    width: 70%;
+    padding: 30px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    backdrop-filter: blur(20px);
+    max-width: 900px;
+  }
+  .text-adjust {
+    color: #70453b;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .header-adjust {
+    color: white;
+    background-color: #70453b;
+  }
+  .button-adjust {
+    background-color: #dcb392;
+    color: white;
+    border-radius: 20px;
+    margin-right: 10px;
+  }
+  .error-message {
+    color: red;
+    font-size: small;
+  }
+</style>
+<link rel="stylesheet" href="./css/home.css" />
+<body>
+  <div class="container" id="available-items">
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr class="header-adjust">
+            <th scope="col">ITEM ID</th>
+            <th scope="col">ITEAM NAME</th>
+            <th scope="col">ITEAM MRP</th>
+            <th scope="col">ITEAM QUANTITY</th>
+            <th scope="col" colspan="2">ACTION</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="container visibility" id="update-items">
+    <div class="row">
+      <form id="foodUpdateForm">
+        <h2 class="mb-3-sm text-adjust">UPDATE ITEM STOCK</h2>
+        <div class="mb-3">
+          <input
+            type="number"
+            class="form-control"
+            name="bmid"
+            readonly
+            hidden
+          />
+        </div>
+        <div class="mb-3">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >ITEM NAME :
+          </label>
+          <label class="form-label field-lable-color" id="item-name"
+            >null</label
+          >
+        </div>
+        <div class="mb-3">
+          <label class="form-label field-lable-color">ITEM MRP : </label>
+          <label class="form-label field-lable-color" id="item-mrp">null</label>
+        </div>
+        <div class="mb-3">
+          <label class="form-label field-lable-color">QUANTITY</label>
+          <input type="number" class="form-control" name="quantity" />
+        </div>
+        <button type="button" onclick="updateMenu()" class="btn button-adjust">
+          UPDATE
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let allMenu = document.getElementById("available-items");
+    let updateMenuElement = document.getElementById("update-items");
+
+    let itemId = document.getElementById("foodUpdateForm").bmid;
+    let itemName = document.getElementById("item-name");
+    let itemMrp = document.getElementById("item-mrp");
+    let itemQuantity = document.getElementById("foodUpdateForm").quantity;
+
+    function rejectRequest(index) {
+      allMenu.classList.add("visibility");
+      updateMenuElement.classList.remove("visibility");
+      itemId.value = copyOfData[index].mid;
+      itemName.innerText = copyOfData[index].foodItem.fname;
+      itemMrp.innerText = copyOfData[index].foodItem.fmrp;
+      itemQuantity.value = copyOfData[index].quantity;
+    }
+    function updateMenu() {
+      fetch(
+        "http://localhost:8080/branch/updateIteamStock/" +
+          localStorage.getItem("emailValidated") +
+          "/" +
+          itemId.value +
+          "/" +
+          itemQuantity.value,
+        {
+          method: "POST",
+        }
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+          updateMenuElement.classList.add("visibility");
+          allMenu.classList.remove("visibility");
+          let table = document.getElementById("table-body");
+          for (let i = 0; i < table.rows.length; i++) {
+            table.deleteRow(i);
+          }
+          fetchAndSet();
+        });
+    }
+    let copyOfData;
+    fetchAndSet();
+    function fetchAndSet() {
+      fetch(
+        "http://localhost:8080/branch/getAllMenu/" +
+          localStorage.getItem("emailValidated"),
+        {
+          method: "POST",
+        }
+      )
+        .then((resp) => resp.json())
+        .then((data) => {
+          if (data.length == 0) alert("No Items available");
+          copyOfData = data;
+          let table = document.getElementById("table-body");
+          if (data.length == 0) {
+            for (let i = 0; i < table.rows.length; i++) {
+              table.deleteRow(i);
+            }
+          }
+          for (let i = 0; i < table.rows.length; i++) {
+            table.deleteRow(i);
+          }
+          for (let i = 0; i < data.length; i++) {
+            let row = table.insertRow(-1);
+            row.insertCell(0).innerText = data[i].foodItem.fid;
+            row.insertCell(1).innerText = data[i].foodItem.fname;
+            row.insertCell(2).innerText = data[i].foodItem.fmrp;
+            row.insertCell(3).innerText = data[i].quantity;
+
+            let reject = document.createElement("button");
+            let textReject = document.createTextNode("UPDATE");
+            reject.appendChild(textReject);
+            reject.classList.add("btn");
+            reject.classList.add("button-adjust");
+            reject.onclick = function () {
+              rejectRequest(i);
+            };
+            row.insertCell(4).appendChild(reject);
+          }
+        });
+    }
+  </script>
+</body>

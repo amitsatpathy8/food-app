@@ -1,0 +1,316 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+  crossorigin="anonymous"
+/>
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+  crossorigin="anonymous"
+></script>
+<style>
+  body {
+    width: 100%;
+    background-image: url(../assets/orderhistory_bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+  .container {
+    margin-top: 30px;
+    width: 70%;
+    padding: 30px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: white;
+    backdrop-filter: blur(20px);
+    max-width: 900px;
+  }
+  .text-adjust {
+    color: #70453b;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .header-adjust {
+    color: white;
+    background-color: #70453b;
+  }
+  .button-adjust {
+    background-color: #dcb392;
+    color: white;
+  }
+  .error-message {
+    color: red;
+    font-size: small;
+  }
+</style>
+<link rel="stylesheet" href="./css/home.css" />
+<body>
+  <div class="container">
+    <div class="row">
+      <form id="branchform">
+        <h2 class="mb-3-sm text-adjust">Add New Branch</h2>
+
+        <div class="mb-3" id="name">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Enter Branch Name</label
+          >
+          <input type="text" class="form-control" name="branchName" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <div class="mb-3" id="state">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Select State</label
+          >
+          <select name="branchState" class="form-control">
+            <option value="none">--Select-State--</option>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Chhattisgarh">Chhattisgarh</option>
+            <option value="Goa">Goa</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Himachal">Himachal Pradesh</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Manipur">Manipur</option>
+            <option value="Meghalaya">Meghalaya</option>
+            <option value="Mizoram">Mizoram</option>
+            <option value="Nagaland">Nagaland</option>
+            <option value="Odisha">Odisha</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Sikkim">Sikkim</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Tripura">Tripura</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Uttarakhand">Uttarakhand</option>
+            <option value="West Bengal">West Bengal</option>
+          </select>
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <div class="mb-3" id="address">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Enter Branch Address</label
+          >
+          <input type="text" class="form-control" name="branchAddress" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <div class="mb-3" id="district">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Enter Branch District</label
+          >
+          <input type="text" class="form-control" name="branchDistrict" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <div class="mb-3" id="pin">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >PIN</label
+          >
+          <input type="number" class="form-control" name="branchPin" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+
+        <div class="mb-3" id="email">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Email</label
+          >
+          <input type="email" class="form-control" name="branchEmail" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+
+        <div class="mb-3" id="password">
+          <label
+            for="exampleInputPassword1"
+            class="form-label field-lable-color"
+            >Password</label
+          >
+          <input type="password" class="form-control" name="branchPassword" />
+          <p class="error-message" id="error_message"></p>
+        </div>
+        <button
+          type="button"
+          onclick="branchValidation()"
+          class="btn button-adjust"
+          id="customer_search"
+        >
+          Create a Branch
+        </button>
+      </form>
+    </div>
+  </div>
+  <script>
+    const isAlphabatesonly = (str) => /^[A-Z a-z]+$/i.test(str);
+    // ---Element selection---
+    let branchName = document.getElementById("branchform").branchName;
+    let branchState = document.getElementById("branchform").branchState;
+    let branchAddress = document.getElementById("branchform").branchAddress;
+    let branchDistrict = document.getElementById("branchform").branchDistrict;
+    let branchPin = document.getElementById("branchform").branchPin;
+    let branchEmail = document.getElementById("branchform").branchEmail;
+    let branchPassword = document.getElementById("branchform").branchPassword;
+
+    // ---Error element selection---
+    let nameError = document
+      .getElementById("name")
+      .getElementsByTagName("p")
+      .item(0);
+    let stateError = document
+      .getElementById("state")
+      .getElementsByTagName("p")
+      .item(0);
+
+    let addressError = document
+      .getElementById("address")
+      .getElementsByTagName("p")
+      .item(0);
+
+    let districtError = document
+      .getElementById("district")
+      .getElementsByTagName("p")
+      .item(0);
+
+    let pinError = document
+      .getElementById("pin")
+      .getElementsByTagName("p")
+      .item(0);
+
+    let emailError = document
+      .getElementById("email")
+      .getElementsByTagName("p")
+      .item(0);
+
+    let passwordError = document
+      .getElementById("password")
+      .getElementsByTagName("p")
+      .item(0);
+
+    function branchValidation() {
+      let flag = true;
+      if (branchName.value == "") {
+        nameError.innerHTML = "Enter the branch name";
+        flag = false;
+      } else if (branchName.value.trim().length == 0) {
+        nameError.innerHTML = "Please provide a valid branch name";
+        flag = false;
+      } else if (!isAlphabatesonly(branchName.value)) {
+        nameError.innerHTML = "Spacial charecters are not allowed";
+        flag = false;
+      } else {
+        nameError.innerHTML = "";
+      }
+
+      if (branchState.value == "none") {
+        stateError.innerHTML = "Please select the state";
+        flag = false;
+      } else {
+        stateError.innerHTML = "";
+      }
+
+      if (branchAddress.value == "") {
+        addressError.innerHTML = "Enter the branch name";
+        flag = false;
+      } else if (branchName.value.trim().length == 0) {
+        addressError.innerHTML = "Please provide a valid branch name";
+        flag = false;
+      } else {
+        addressError.innerHTML = "";
+      }
+
+      if (branchDistrict.value == "") {
+        districtError.innerHTML = "Enter the branch name";
+        flag = false;
+      } else if (branchDistrict.value.trim().length == 0) {
+        districtError.innerHTML = "Please provide a valid branch name";
+        flag = false;
+      } else {
+        districtError.innerHTML = "";
+      }
+
+      if (branchPin.value.length == 0) {
+        pinError.innerHTML = "Enter the PIN code";
+        flag = false;
+      } else if (branchPin.value.length != 6) {
+        pinError.innerHTML = "Enter a valid PIN code";
+        flag = false;
+      } else {
+        pinError.innerHTML = "";
+      }
+
+      let validEmailWithRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (branchEmail.value.length == 0) {
+        emailError.innerHTML = "Enter a email";
+        flag = false;
+      } else if (!branchEmail.value.match(validEmailWithRegex)) {
+        emailError.innerHTML = "Enter a valid email";
+        flag = false;
+      } else {
+        emailError.innerHTML = "";
+      }
+
+      if (branchPassword.value == "") {
+        passwordError.innerHTML =
+          "Provide a password for the branch to access the site";
+        flag = false;
+      } else if (branchPassword.value.length == 0) {
+        passwordError.innerHTML = "Only Space is not allowed";
+        flag = false;
+      } else if (branchPassword.value.length < 6) {
+        passwordError.innerHTML = "Password length must be 6 or more";
+        flag = false;
+      } else {
+        passwordError.innerHTML = "";
+      }
+
+      if (flag) {
+        const branchObject = {
+          bname: branchName.value,
+          bstate: branchState.value,
+          blocation: branchAddress.value,
+          bdistrict: branchDistrict.value,
+          bpin: branchPin.value,
+          bemail: branchEmail.value,
+          bpassword: branchPassword.value,
+        };
+        console.log(branchObject);
+        fetch("http://localhost:8080/admin/save", {
+          method: "POST",
+          body: JSON.stringify(branchObject),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((resp) => resp.json())
+          .then((data) => {
+            if (data) {
+              alert("Congratulation, New Branch created");
+            } else {
+              alert("Some of the unique fields already being used.");
+            }
+          });
+      }
+    }
+  </script>
+</body>
